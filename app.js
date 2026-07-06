@@ -7,7 +7,8 @@
   const catalog = document.getElementById('catalog');
   const selectedTitle = document.getElementById('selectedTitle');
   const selectedMeta = document.getElementById('selectedMeta');
-  const rotateBtn = document.getElementById('rotateBtn');
+  const rotateLeftBtn = document.getElementById('rotateLeftBtn');
+  const rotateRightBtn = document.getElementById('rotateRightBtn');
   const copyBtn = document.getElementById('copyBtn');
   const deleteBtn = document.getElementById('deleteBtn');
   const clearBtn = document.getElementById('clearBtn');
@@ -131,13 +132,8 @@
     if (svg.hasPointerCapture(event.pointerId)) svg.releasePointerCapture(event.pointerId);
   });
 
-  rotateBtn.addEventListener('click', () => {
-    const item = selectedItem();
-    if (!item) return;
-    item.r = ((item.r || 0) + 90) % 360;
-    renderItems();
-    save();
-  });
+  rotateLeftBtn.addEventListener('click', () => rotateSelected(-90));
+  rotateRightBtn.addEventListener('click', () => rotateSelected(90));
 
   copyBtn.addEventListener('click', () => {
     const item = selectedItem();
@@ -169,6 +165,26 @@
   });
 
   savePngBtn.addEventListener('click', exportPng);
+
+  window.addEventListener('keydown', (event) => {
+    if (!selectedId) return;
+    const target = event.target;
+    const isTyping = target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
+    if (isTyping) return;
+
+    if (event.key.toLowerCase() === 'r') {
+      event.preventDefault();
+      rotateSelected(event.shiftKey ? -90 : 90);
+    }
+    if (event.key === 'Delete' || event.key === 'Backspace') {
+      event.preventDefault();
+      placed = placed.filter((item) => item.uid !== selectedId);
+      selectedId = null;
+      renderItems();
+      updateSelection();
+      save();
+    }
+  });
 
   function renderCatalog() {
     const groups = [...new Set(products.map((product) => product.group))];
@@ -270,6 +286,7 @@
       group.appendChild(svgEl('text', { x: 0, y: (index - (lines.length - 1) / 2) * 0.24, class: 'product-label' }, line));
     });
     group.appendChild(svgEl('text', { x: 0, y: 0.46, class: 'product-label', style: 'font-size:0.135px;fill:#334150;' }, product.dims.replace(' cm', '').replace(', h ', ' h ')));
+    group.appendChild(directionArrow(product));
 
     if (selected) {
       const r = product.kind === 'circle' ? product.w / 2 : null;
@@ -301,7 +318,8 @@
   function updateSelection() {
     const item = selectedItem();
     const product = item ? productById(item.productId) : null;
-    rotateBtn.disabled = !item;
+    rotateLeftBtn.disabled = !item;
+    rotateRightBtn.disabled = !item;
     copyBtn.disabled = !item;
     deleteBtn.disabled = !item;
     if (!item || !product) {
@@ -311,6 +329,26 @@
     }
     selectedTitle.textContent = product.name;
     selectedMeta.textContent = `${product.dims} | positie ${item.x.toFixed(2)} m, ${item.y.toFixed(2)} m | rotatie ${item.r || 0} graden`;
+  }
+
+  function rotateSelected(degrees) {
+    const item = selectedItem();
+    if (!item) return;
+    item.r = normalizeRotation((item.r || 0) + degrees);
+    renderItems();
+    updateSelection();
+    save();
+  }
+
+  function normalizeRotation(value) {
+    return ((value % 360) + 360) % 360;
+  }
+
+  function directionArrow(product) {
+    const size = Math.max(0.18, Math.min(0.34, Math.min(product.w, product.d) * 0.18));
+    const y = product.kind === 'circle' ? -product.d / 2 + size * 0.85 : -product.d / 2 + size * 0.95;
+    const path = `M 0 ${y - size * 0.70} L ${size * 0.58} ${y + size * 0.48} L 0 ${y + size * 0.18} L ${-size * 0.58} ${y + size * 0.48} Z`;
+    return svgEl('path', { d: path, class: 'direction-arrow' });
   }
 
   function selectedItem() {

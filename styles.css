@@ -140,7 +140,7 @@
 
     .selected-actions {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 7px;
     }
 
@@ -222,6 +222,7 @@
     .dim-line { stroke: #5a6470; stroke-width: 0.025; marker-start: url(#arrow); marker-end: url(#arrow); }
     .product-shape { stroke-width: 0.055; vector-effect: non-scaling-stroke; cursor: move; }
     .product-label { pointer-events: none; font: 0.18px Arial, Helvetica, sans-serif; fill: #1f2933; text-anchor: middle; dominant-baseline: middle; }
+    .direction-arrow { pointer-events: none; fill: rgba(31, 41, 51, 0.72); stroke: #fffdf8; stroke-width: 0.025; vector-effect: non-scaling-stroke; }
     .glass { pointer-events: none; stroke: #e8fbff; stroke-width: 0.07; stroke-linecap: round; vector-effect: non-scaling-stroke; }
     .selection-box { fill: none; stroke: var(--selected); stroke-width: 0.055; stroke-dasharray: 0.16 0.10; vector-effect: non-scaling-stroke; pointer-events: none; }
     .drag-target { outline: 2px solid #256d90; outline-offset: -8px; }
@@ -230,6 +231,7 @@
       header,
       .app { display: block; }
       .actions { justify-content: flex-start; margin-top: 12px; }
+      .selected-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .sidebar { max-height: none; margin-top: 14px; }
     }
 
