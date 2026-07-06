@@ -1,6 +1,7 @@
 ﻿(() => {
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const STORAGE_KEY = 'showroom-bouwer-kortrijk-v1';
+  const OFFICE_MIGRATION_KEY = 'showroom-bouwer-kortrijk-office-migrated-v1';
   const svg = document.getElementById('plan');
   const board = document.getElementById('board');
   const itemsLayer = document.getElementById('items');
@@ -23,10 +24,12 @@
     spa: 'url(#spaWater)',
     hottub: 'url(#wood)',
     canopy: 'rgba(111, 127, 141, 0.12)',
-    grass: 'url(#grass)'
+    grass: 'url(#grass)',
+    office: 'var(--office)'
   };
 
   const products = [
+    { id: 'office', group: 'Plan elementen', name: 'Kantoor', dims: '285 x 226 cm', w: 2.85, d: 2.26, kind: 'office', color: 'office' },
     { id: 'infra-160', group: 'Infra4Health', name: '160 glass front', dims: '160 x 120 x 195 cm', w: 1.60, d: 1.20, h: 1.95, kind: 'rect', color: 'infra', glass: 'left' },
     { id: 'infra-130', group: 'Infra4Health', name: '130 glass front', dims: '130 x 120 x 195 cm', w: 1.30, d: 1.20, h: 1.95, kind: 'rect', color: 'infra', glass: 'left' },
     { id: 'infra-corner-160', group: 'Infra4Health', name: '160 hoek cabine', dims: '160 x 160 x 200 cm', w: 1.60, d: 1.60, h: 2.00, kind: 'corner', color: 'infra', glass: 'angled' },
@@ -65,6 +68,7 @@
   ];
 
   let placed = load();
+  migrateOfficeElement();
   let selectedIds = new Set();
   let dragState = null;
 
@@ -317,6 +321,10 @@
       const points = cornerPoints(w, d).map(([x, y]) => `${x},${y}`).join(' ');
       group.appendChild(svgEl('polygon', { points, fill, stroke, class: 'product-shape' }));
       group.appendChild(svgEl('line', { x1: w / 2, y1: d * 0.18, x2: w * 0.18, y2: d / 2, class: 'glass' }));
+    } else if (product.kind === 'office') {
+      group.appendChild(svgEl('rect', { x: -w / 2, y: -d / 2, width: w, height: d, rx: 0.03, fill, stroke: '#30343b', class: 'product-shape' }));
+      group.appendChild(svgEl('line', { x1: -0.70, y1: d / 2, x2: 0.10, y2: d / 2, stroke: 'var(--floor)', 'stroke-width': 0.13 }));
+      group.appendChild(svgEl('path', { d: `M -0.70 ${d / 2} A 0.80 0.80 0 0 0 0.10 ${d / 2 - 0.80}`, class: 'door' }));
     } else {
       const opacity = product.kind === 'canopy' ? 0.92 : 1;
       const rectFill = product.kind === 'grass' ? 'url(#grass)' : fill;
@@ -594,6 +602,21 @@
     }
   }
 
+  function migrateOfficeElement() {
+    if (localStorage.getItem(OFFICE_MIGRATION_KEY)) return;
+    if (!placed.some((item) => item.productId === 'office')) {
+      placed.push({
+        uid: uid(),
+        productId: 'office',
+        x: 14.275,
+        y: 1.13,
+        r: 0
+      });
+      save();
+    }
+    localStorage.setItem(OFFICE_MIGRATION_KEY, '1');
+  }
+
   function cssColor(key) {
     const map = {
       infra: '#f4b860',
@@ -603,7 +626,8 @@
       spa: '#4f9fc9',
       hottub: '#b77a3e',
       canopy: '#6f7f8d',
-      grass: '#6aa06a'
+      grass: '#6aa06a',
+      office: '#e7e0d4'
     };
     return map[key] || '#f4b860';
   }
