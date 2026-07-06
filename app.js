@@ -281,12 +281,7 @@
       }
     }
 
-    const lines = splitLabel(product.name);
-    lines.forEach((line, index) => {
-      group.appendChild(svgEl('text', { x: 0, y: (index - (lines.length - 1) / 2) * 0.24, class: 'product-label' }, line));
-    });
-    group.appendChild(svgEl('text', { x: 0, y: 0.46, class: 'product-label', style: 'font-size:0.135px;fill:#334150;' }, product.dims.replace(' cm', '').replace(', h ', ' h ')));
-    group.appendChild(directionArrow(product));
+    group.appendChild(productText(product));
 
     if (selected) {
       const r = product.kind === 'circle' ? product.w / 2 : null;
@@ -344,11 +339,56 @@
     return ((value % 360) + 360) % 360;
   }
 
-  function directionArrow(product) {
-    const size = Math.max(0.18, Math.min(0.34, Math.min(product.w, product.d) * 0.18));
-    const y = product.kind === 'circle' ? -product.d / 2 + size * 0.85 : -product.d / 2 + size * 0.95;
-    const path = `M 0 ${y - size * 0.70} L ${size * 0.58} ${y + size * 0.48} L 0 ${y + size * 0.18} L ${-size * 0.58} ${y + size * 0.48} Z`;
-    return svgEl('path', { d: path, class: 'direction-arrow' });
+  function productText(product) {
+    const group = svgEl('g');
+    const innerW = Math.max(0.35, product.w * (product.kind === 'circle' ? 0.66 : 0.82));
+    const innerH = Math.max(0.30, product.d * (product.kind === 'circle' ? 0.58 : 0.62));
+    const maxChars = Math.max(5, Math.floor(innerW / 0.085));
+    const nameLines = splitLabel(product.name, maxChars).slice(0, 3);
+    const dimLines = splitDims(product.dims, maxChars);
+    const lines = [
+      ...nameLines.map((text) => ({ text, kind: 'name' })),
+      ...dimLines.map((text) => ({ text, kind: 'dims' }))
+    ];
+    const longest = Math.max(...lines.map((line) => line.text.length), 1);
+    const byWidth = innerW / (longest * 0.56);
+    const byHeight = innerH / (lines.length * 1.24);
+    const fontSize = Math.max(0.075, Math.min(0.18, byWidth, byHeight));
+    const lineHeight = fontSize * 1.22;
+    const yStart = -((lines.length - 1) * lineHeight) / 2;
+
+    lines.forEach((line, index) => {
+      group.appendChild(svgEl('text', {
+        x: 0,
+        y: yStart + index * lineHeight,
+        class: 'product-label',
+        style: `font-size:${fontSize.toFixed(3)}px;fill:${line.kind === 'dims' ? '#334150' : '#1f2933'};font-weight:${line.kind === 'name' ? 700 : 400};`
+      }, line.text));
+    });
+    return group;
+  }
+
+  function splitDims(dims, maxChars) {
+    const cleaned = dims
+      .split('|')
+      .pop()
+      .trim()
+      .replace(/\s*cm\b/gi, '')
+      .replace(/,\s*/g, '|')
+      .replace(/\s+/g, ' ');
+
+    if (cleaned.includes('|')) {
+      return cleaned.split('|').map((part) => part.trim()).filter(Boolean).slice(0, 3);
+    }
+
+    const parts = cleaned.split(' x ').map((part) => part.trim());
+    if (parts.length >= 3) {
+      return [`${parts[0]} x ${parts[1]}`, `x ${parts.slice(2).join(' x ')}`];
+    }
+    if (cleaned.length > maxChars && parts.length === 2) {
+      return [parts[0], `x ${parts[1]}`];
+    }
+    return [cleaned];
   }
 
   function selectedItem() {
@@ -373,13 +413,13 @@
     return el;
   }
 
-  function splitLabel(name) {
-    if (name.length <= 13) return [name];
+  function splitLabel(name, maxChars = 13) {
+    if (name.length <= maxChars) return [name];
     const parts = name.split(' ');
     const lines = [];
     let current = '';
     parts.forEach((part) => {
-      if ((current + ' ' + part).trim().length > 13 && current) {
+      if ((current + ' ' + part).trim().length > maxChars && current) {
         lines.push(current);
         current = part;
       } else {
