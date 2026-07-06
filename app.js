@@ -30,6 +30,7 @@
 
   const products = [
     { id: 'office', group: 'Plan elementen', name: 'Kantoor', dims: '285 x 226 cm', w: 2.85, d: 2.26, kind: 'office', color: 'office' },
+    { id: 'touchscreen', group: 'Plan elementen', name: 'Touchscreenscherm op stand', dims: '100 x 100 cm', w: 1.00, d: 1.00, kind: 'screen', color: 'screen' },
     { id: 'infra-160', group: 'Infra4Health', name: '160 glass front', dims: '160 x 120 x 195 cm', w: 1.60, d: 1.20, h: 1.95, kind: 'rect', color: 'infra', glass: 'left' },
     { id: 'infra-130', group: 'Infra4Health', name: '130 glass front', dims: '130 x 120 x 195 cm', w: 1.30, d: 1.20, h: 1.95, kind: 'rect', color: 'infra', glass: 'left' },
     { id: 'infra-corner-160', group: 'Infra4Health', name: '160 hoek cabine', dims: '160 x 160 x 200 cm', w: 1.60, d: 1.60, h: 2.00, kind: 'corner', color: 'infra', glass: 'angled' },
@@ -325,6 +326,11 @@
       group.appendChild(svgEl('rect', { x: -w / 2, y: -d / 2, width: w, height: d, rx: 0.03, fill, stroke: '#30343b', class: 'product-shape' }));
       group.appendChild(svgEl('line', { x1: -0.70, y1: d / 2, x2: 0.10, y2: d / 2, stroke: 'var(--floor)', 'stroke-width': 0.13 }));
       group.appendChild(svgEl('path', { d: `M -0.70 ${d / 2} A 0.80 0.80 0 0 0 0.10 ${d / 2 - 0.80}`, class: 'door' }));
+    } else if (product.kind === 'screen') {
+      group.appendChild(svgEl('rect', { x: -w / 2, y: -d / 2, width: w, height: d, rx: 0.08, fill: '#f3f6f8', stroke: '#30343b', class: 'product-shape' }));
+      group.appendChild(svgEl('rect', { x: -w * 0.34, y: -d * 0.32, width: w * 0.68, height: d * 0.42, rx: 0.04, fill: '#26313d', stroke: '#111820', 'stroke-width': 0.035 }));
+      group.appendChild(svgEl('rect', { x: -w * 0.08, y: d * 0.10, width: w * 0.16, height: d * 0.25, rx: 0.02, fill: '#67727e', stroke: '#30343b', 'stroke-width': 0.025 }));
+      group.appendChild(svgEl('rect', { x: -w * 0.25, y: d * 0.35, width: w * 0.50, height: d * 0.10, rx: 0.03, fill: '#67727e', stroke: '#30343b', 'stroke-width': 0.025 }));
     } else {
       const opacity = product.kind === 'canopy' ? 0.92 : 1;
       const rectFill = product.kind === 'grass' ? 'url(#grass)' : fill;
@@ -627,7 +633,8 @@
       hottub: '#b77a3e',
       canopy: '#6f7f8d',
       grass: '#6aa06a',
-      office: '#e7e0d4'
+      office: '#e7e0d4',
+      screen: '#dbe4ea'
     };
     return map[key] || '#f4b860';
   }
