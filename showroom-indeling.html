@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Indeling showroom Kortrijk - Sunspa Benelux</title>
+  <style>
+    :root {
+      --ink: #1f2933;
+      --muted: #5f6b7a;
+      --wall: #30343b;
+      --floor: #f7f2ea;
+      --window: #64a8cf;
+      --infra: #f4b860;
+      --hc: #e7826b;
+      --classic: #c99b5c;
+      --barrel: #9b6a3d;
+      --spa: #4f9fc9;
+      --hottub: #b77a3e;
+      --canopy: #6f7f8d;
+      --grass: #6aa06a;
+      --bar: #c8a983;
+      --office: #e7e0d4;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ece7de;
+    }
+
+    main {
+      width: min(1280px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .sheet {
+      display: grid;
+      grid-template-columns: minmax(520px, 820px) minmax(300px, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .plan-wrap,
+    .panel {
+      background: #fffdf8;
+      border: 1px solid #d8d0c4;
+      border-radius: 8px;
+      box-shadow: 0 10px 28px rgba(31, 41, 51, 0.08);
+    }
+
+    .plan-wrap {
+      padding: 18px;
+      overflow: auto;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-width: 540px;
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th,
+    td {
+      padding: 8px 7px;
+      border-bottom: 1px solid #e7ded2;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: #394554;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0 0 16px;
+      font-size: 12px;
+    }
+
+    .legend span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.22);
+      flex: 0 0 auto;
+    }
+
+    .note {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .sources {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .sources a { color: #256d90; }
+
+    @media (max-width: 980px) {
+      header,
+      .sheet { display: block; }
+      .panel { margin-top: 18px; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>Voorstel indeling showroom Kortrijk</h1>
+      <p class="subtitle">Schaalplan op basis van grondplan 15,7 m x 34,7 m. Producten zijn op ware verhouding geplaatst volgens de opgegeven afmetingen; ramen, poort, bar en kantoor zijn benaderd uit de aangeleverde foto.</p>
+    </div>
+  </header>
+
+  <section class="sheet" aria-label="Showroom indeling">
+    <div class="plan-wrap">
+      <svg viewBox="-1.4 -1.4 19.1 37.5" role="img" aria-label="Bovenaanzicht showroom met sauna's, barrels en zwemspa">
+        <defs>
+          <pattern id="wood" width="0.32" height="0.32" patternUnits="userSpaceOnUse" patternTransform="rotate(28)">
+            <rect width="0.32" height="0.32" fill="#b98653"></rect>
+            <path d="M 0 0.16 H 0.32" stroke="#7a4f2d" stroke-width="0.025" opacity="0.55"></path>
+          </pattern>
+          <pattern id="grass" width="0.22" height="0.22" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
+            <rect width="0.22" height="0.22" fill="#7dbb73"></rect>
+            <path d="M 0.03 0 L 0.03 0.22 M 0.14 0 L 0.14 0.22" stroke="#4f884e" stroke-width="0.018" opacity="0.55"></path>
+          </pattern>
+          <linearGradient id="spaWater" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#8fd2ec"></stop>
+            <stop offset="1" stop-color="#2e82ad"></stop>
+          </linearGradient>
+          <style>
+            .wall { fill: none; stroke: var(--wall); stroke-width: 0.16; stroke-linejoin: round; }
+            .inner-wall { fill: none; stroke: var(--wall); stroke-width: 0.10; stroke-linejoin: round; }
+            .thin { stroke-width: 0.04; }
+            .floor { fill: var(--floor); stroke: none; }
+            .window { stroke: var(--window); stroke-width: 0.12; stroke-linecap: round; }
+            .door { fill: none; stroke: #575b62; stroke-width: 0.045; }
+            .label { font: 0.25px Arial, Helvetica, sans-serif; fill: #1f2933; text-anchor: middle; dominant-baseline: middle; letter-spacing: 0; }
+            .small { font-size: 0.18px; fill: #26313d; }
+            .tiny { font-size: 0.145px; fill: #334150; }
+            .side-label { font-size: 0.23px; font-weight: 700; fill: #29333f; }
+            .dim { font: 0.18px Arial, Helvetica, sans-serif; fill: #44515f; text-anchor: middle; }
+            .dim-line { stroke: #5a6470; stroke-width: 0.025; marker-start: url(#arrow); marker-end: url(#arrow); }
+            .front-glass { stroke: #dff7ff; stroke-width: 0.07; stroke-linecap: round; }
+            .clearance { fill: none; stroke: #8f989f; stroke-width: 0.025; stroke-dasharray: 0.13 0.11; opacity: 0.8; }
+            .canopy { fill: rgba(111, 127, 141, 0.10); stroke: var(--canopy); stroke-width: 0.055; stroke-dasharray: 0.18 0.12; }
+            .post { fill: #586674; stroke: #2f3943; stroke-width: 0.025; }
+          </style>
+          <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+            <path d="M 0 0 L 6 3 L 0 6 z" fill="#5a6470"></path>
+          </marker>
+        </defs>
+
+        <!-- Building shell -->
+        <rect class="floor" x="0" y="0" width="15.7" height="34.7"></rect>
+        <rect class="wall" x="0" y="0" width="15.7" height="34.7"></rect>
+
+        <!-- Approximate facade openings from the source plan -->
+        <line class="window" x1="0.9" y1="34.7" x2="5.2" y2="34.7"></line>
+        <line class="window" x1="8.45" y1="34.7" x2="14.6" y2="34.7"></line>
+        <line class="window" x1="15.7" y1="27.0" x2="15.7" y2="34.3"></line>
+        <text class="side-label" x="3.05" y="35.18">RAMEN</text>
+        <text class="side-label" x="11.6" y="35.18">RAMEN</text>
+        <text class="side-label" transform="translate(16.18 30.6) rotate(90)">RAAM 7,7 m</text>
+
+        <line x1="7.10" y1="34.7" x2="8.20" y2="34.7" stroke="#fffdf8" stroke-width="0.22"></line>
+        <path class="door" d="M 7.10 34.7 A 1.10 1.10 0 0 0 8.20 33.60"></path>
+        <path class="door" d="M 8.20 34.7 A 1.10 1.10 0 0 1 7.10 33.60"></path>
+        <text class="side-label" x="7.65" y="35.18">INKOM</text>
+
+        <line x1="15.7" y1="8.45" x2="15.7" y2="11.92" stroke="#fffdf8" stroke-width="0.22"></line>
+        <path class="door" d="M 15.7 11.92 A 1.05 1.05 0 0 0 14.65 10.87"></path>
+        <text class="side-label" x="16.55" y="10.2">POORT</text>
+        <text class="dim" x="16.55" y="11.05">3,47 m</text>
+
+        <line x1="7.00" y1="0" x2="8.05" y2="0" stroke="#fffdf8" stroke-width="0.22"></line>
+        <path class="door" d="M 7.00 0 A 1.05 1.05 0 0 1 8.05 1.05"></path>
+        <text class="side-label" x="7.52" y="-0.52">INGANG DEUR</text>
+
+        <!-- Office approximation -->
+        <rect x="12.85" y="0.00" width="2.85" height="2.26" fill="var(--office)" stroke="#30343b" stroke-width="0.08"></rect>
+        <line x1="13.58" y1="2.26" x2="14.32" y2="2.26" stroke="var(--floor)" stroke-width="0.13"></line>
+        <path class="door" d="M 13.58 2.26 A 0.74 0.74 0 0 0 14.32 1.52"></path>
+        <text class="label" x="14.27" y="0.88">KANTOOR</text>
+        <text class="label small" x="14.27" y="1.28">2,85 m breed</text>
+        <text class="label small" x="14.27" y="1.62">2,26 m hoog</text>
+
+        <!-- Bar -->
+        <rect x="0.18" y="21.30" width="2.26" height="5.70" fill="var(--bar)" stroke="#8a6b48" stroke-width="0.06"></rect>
+        <rect x="0.48" y="21.75" width="1.43" height="4.80" fill="#ead7bf" stroke="#8a6b48" stroke-width="0.035"></rect>
+        <text class="label" x="1.31" y="24.15">BAR</text>
+        <text class="dim" x="2.95" y="24.25" transform="rotate(90 2.95 24.25)">5,7 m x 2,26 m</text>
+
+        <!-- Left wall traditional saunas -->
+        <g aria-label="Sauna's linkermuur boven bar">
+          <rect x="0.22" y="18.94" width="2.05" height="2.06" fill="var(--classic)" stroke="#6f4e2b" stroke-width="0.05"></rect>
+          <line class="front-glass" x1="2.27" y1="19.18" x2="2.27" y2="20.76"></line>
+          <text class="label tiny" x="1.25" y="19.72">Discovery</text>
+          <text class="label tiny" x="1.25" y="20.03">206 x 205</text>
+          <text class="label tiny" x="1.25" y="20.34">h 204 cm</text>
+
+          <rect x="0.22" y="16.44" width="1.75" height="2.00" fill="var(--classic)" stroke="#6f4e2b" stroke-width="0.05"></rect>
+          <line class="front-glass" x1="1.97" y1="16.66" x2="1.97" y2="18.20"></line>
+          <text class="label tiny" x="1.10" y="17.10">Traditionele</text>
+          <text class="label tiny" x="1.10" y="17.40">Finse sauna</text>
+          <text class="label tiny" x="1.10" y="17.72">200 x 175</text>
+
+          <rect x="0.22" y="13.74" width="1.20" height="2.20" fill="var(--classic)" stroke="#6f4e2b" stroke-width="0.05"></rect>
+          <line class="front-glass" x1="1.42" y1="14.03" x2="1.42" y2="15.66"></line>
+          <text class="label tiny" x="0.82" y="14.50">Chaleur</text>
+          <text class="label tiny" x="0.82" y="14.82">220 x 120</text>
+          <text class="label tiny" x="0.82" y="15.14">h 200 cm</text>
+        </g>
+
+        <!-- Swim spa canopy in the middle -->
+        <g aria-label="Overkapping 3 x 6 m boven zwemspa">
+          <rect class="canopy" x="6.35" y="14.32" width="3.00" height="6.00" rx="0.12"></rect>
+          <rect class="post" x="6.25" y="14.22" width="0.20" height="0.20"></rect>
+          <rect class="post" x="9.25" y="14.22" width="0.20" height="0.20"></rect>
+          <rect class="post" x="6.25" y="20.22" width="0.20" height="0.20"></rect>
+          <rect class="post" x="9.25" y="20.22" width="0.20" height="0.20"></rect>
+          <text class="label tiny" x="7.85" y="14.02">Overkapping 3 x 6 m</text>
+        </g>
+
+        <!-- Swim spa in the middle -->
+        <g aria-label="Zwemspa Alicante">
+          <rect x="6.71" y="14.35" width="2.28" height="5.94" rx="0.35" fill="url(#spaWater)" stroke="#1e668e" stroke-width="0.07"></rect>
+          <rect x="6.98" y="14.68" width="1.74" height="5.28" rx="0.25" fill="none" stroke="#d5f5ff" stroke-width="0.05" opacity="0.85"></rect>
+          <circle cx="7.25" cy="15.18" r="0.08" fill="#eaffff"></circle>
+          <circle cx="8.45" cy="15.18" r="0.08" fill="#eaffff"></circle>
+          <circle cx="7.25" cy="19.45" r="0.08" fill="#eaffff"></circle>
+          <circle cx="8.45" cy="19.45" r="0.08" fill="#eaffff"></circle>
+          <text class="label" x="7.85" y="17.05" fill="#0e3c54">Zwemspa</text>
+          <text class="label" x="7.85" y="17.43" fill="#0e3c54">Alicante</text>
+          <text class="label small" x="7.85" y="17.84" fill="#0e3c54">594 x 228 x 137 cm</text>
+          <rect class="clearance" x="5.81" y="13.45" width="4.08" height="7.74" rx="0.45"></rect>
+        </g>
+
+        <!-- Lower-left canopy with artificial grass and Bullfrog A7L -->
+        <g aria-label="Overkapping 4 x 4 m met kunstgras en Bullfrog A7L">
+          <rect x="0.65" y="29.72" width="4.00" height="4.00" fill="url(#grass)" stroke="#3f703f" stroke-width="0.05"></rect>
+          <rect class="canopy" x="0.65" y="29.72" width="4.00" height="4.00" rx="0.10"></rect>
+          <rect class="post" x="0.55" y="29.62" width="0.20" height="0.20"></rect>
+          <rect class="post" x="4.55" y="29.62" width="0.20" height="0.20"></rect>
+          <rect class="post" x="0.55" y="33.62" width="0.20" height="0.20"></rect>
+          <rect class="post" x="4.55" y="33.62" width="0.20" height="0.20"></rect>
+          <rect x="1.53" y="30.60" width="2.24" height="2.24" rx="0.28" fill="url(#spaWater)" stroke="#1e668e" stroke-width="0.06"></rect>
+          <rect x="1.82" y="30.89" width="1.66" height="1.66" rx="0.20" fill="none" stroke="#d5f5ff" stroke-width="0.045" opacity="0.85"></rect>
+          <circle cx="2.08" cy="31.15" r="0.07" fill="#eaffff"></circle>
+          <circle cx="3.22" cy="31.15" r="0.07" fill="#eaffff"></circle>
+          <circle cx="2.08" cy="32.30" r="0.07" fill="#eaffff"></circle>
+          <circle cx="3.22" cy="32.30" r="0.07" fill="#eaffff"></circle>
+          <text class="label tiny" x="2.65" y="31.50" fill="#0e3c54">Bullfrog</text>
+          <text class="label tiny" x="2.65" y="31.80" fill="#0e3c54">A7L</text>
+          <text class="label tiny" x="2.65" y="32.10" fill="#0e3c54">224 x 224</text>
+          <text class="label tiny" x="2.65" y="29.42">Overkapping 4 x 4 m + kunstgras</text>
+        </g>
+
+        <!-- Barrels front-right, doors toward front windows -->
+        <g aria-label="Barrelsauna's rechtsonder">
+          <path d="M 9.58 32.00
+                   C 9.58 31.49 9.99 31.08 10.50 31.08
+                   L 10.51 31.08
+                   C 11.02 31.08 11.43 31.49 11.43 32.00
+                   L 11.43 34.30
+                   L 9.58 34.30 Z"
+                fill="url(#wood)" stroke="#69401f" stroke-width="0.06"></path>
+          <line class="front-glass" x1="9.82" y1="34.30" x2="11.18" y2="34.30"></line>
+          <text class="label tiny" x="10.50" y="32.22">TR230</text>
+          <text class="label tiny" x="10.50" y="32.53">Halfglas</text>
+          <text class="label tiny" x="10.50" y="32.84">230 diep</text>
+          <text class="label tiny" x="10.50" y="33.15">diam. 185</text>
+
+          <path d="M 11.90 31.42
+                   C 11.90 30.83 12.38 30.35 12.97 30.35
+                   C 13.56 30.35 14.04 30.83 14.04 31.42
+                   L 14.04 34.28
+                   L 11.90 34.28 Z"
+                fill="url(#wood)" stroke="#69401f" stroke-width="0.06"></path>
+          <line class="front-glass" x1="12.17" y1="34.28" x2="13.77" y2="34.28"></line>
+          <text class="label tiny" x="12.97" y="31.65">TR300</text>
+          <text class="label tiny" x="12.97" y="31.96">Halfglas</text>
+          <text class="label tiny" x="12.97" y="32.27">286 diep</text>
+          <text class="label tiny" x="12.97" y="32.58">diam. 214</text>
+        </g>
+
+        <!-- Round Python cedar hottub near side window and barrels -->
+        <g aria-label="Python hottub spa bij zijraam">
+          <circle cx="14.65" cy="29.18" r="1.015" fill="url(#wood)" stroke="#69401f" stroke-width="0.06"></circle>
+          <circle cx="14.65" cy="29.18" r="0.76" fill="url(#spaWater)" stroke="#d5f5ff" stroke-width="0.05"></circle>
+          <circle cx="14.30" cy="28.86" r="0.06" fill="#eaffff"></circle>
+          <circle cx="15.00" cy="28.86" r="0.06" fill="#eaffff"></circle>
+          <circle cx="14.30" cy="29.50" r="0.06" fill="#eaffff"></circle>
+          <circle cx="15.00" cy="29.50" r="0.06" fill="#eaffff"></circle>
+          <text class="label tiny" x="14.65" y="29.04" fill="#0e3c54">Python</text>
+          <text class="label tiny" x="14.65" y="29.34" fill="#0e3c54">diam. 203</text>
+        </g>
+
+        <!-- Right wall infrared row, ordered window to gate -->
+        <g aria-label="Infraroodsauna's rechtermuur van raam naar poort">
+          <rect x="14.35" y="24.35" width="1.20" height="1.60" fill="var(--infra)" stroke="#8b5b0b" stroke-width="0.045"></rect>
+          <line class="front-glass" x1="14.35" y1="24.50" x2="14.35" y2="25.80"></line>
+          <text class="label tiny" x="14.95" y="24.89">160 glass</text>
+          <text class="label tiny" x="14.95" y="25.19">160 x 120</text>
+
+          <rect x="14.35" y="22.70" width="1.20" height="1.30" fill="var(--infra)" stroke="#8b5b0b" stroke-width="0.045"></rect>
+          <line class="front-glass" x1="14.35" y1="22.84" x2="14.35" y2="23.86"></line>
+          <text class="label tiny" x="14.95" y="23.20">130 glass</text>
+          <text class="label tiny" x="14.95" y="23.50">130 x 120</text>
+
+          <rect x="14.45" y="20.85" width="1.10" height="1.50" fill="var(--infra)" stroke="#8b5b0b" stroke-width="0.045"></rect>
+          <line class="front-glass" x1="14.45" y1="21.00" x2="14.45" y2="22.20"></line>
+          <text class="label tiny" x="15.00" y="21.41">i150</text>
+          <text class="label tiny" x="15.00" y="21.71">150 x 110</text>
+
+          <rect x="14.45" y="19.30" width="1.10" height="1.20" fill="var(--infra)" stroke="#8b5b0b" stroke-width="0.045"></rect>
+          <line class="front-glass" x1="14.45" y1="19.44" x2="14.45" y2="20.36"></line>
+          <text class="label tiny" x="15.00" y="19.78">i120</text>
+          <text class="label tiny" x="15.00" y="20.08">120 x 110</text>
+
+          <rect x="14.55" y="17.95" width="1.00" height="1.00" fill="var(--infra)" stroke="#8b5b0b" stroke-width="0.045"></rect>
+          <line class="front-glass" x1="14.55" y1="18.07" x2="14.55" y2="18.83"></line>
+          <text class="label tiny" x="15.05" y="18.33">i100</text>
+          <text class="label tiny" x="15.05" y="18.63">100 x 100</text>
+
+          <rect x="14.65" y="16.70" width="0.90" height="0.90" fill="var(--hc)" stroke="#853f31" stroke-width="0.045"></rect>
+          <line class="front-glass" x1="14.65" y1="16.81" x2="14.65" y2="17.49"></line>
+          <text class="label tiny" x="15.10" y="17.03">HC 90</text>
+          <text class="label tiny" x="15.10" y="17.32">90 x 90</text>
+
+          <rect x="14.55" y="15.25" width="1.00" height="1.10" fill="var(--hc)" stroke="#853f31" stroke-width="0.045"></rect>
+          <line class="front-glass" x1="14.55" y1="15.38" x2="14.55" y2="16.22"></line>
+          <text class="label tiny" x="15.05" y="15.66">HC 110</text>
+          <text class="label tiny" x="15.05" y="15.96">110 x 100</text>
+
+          <rect x="14.55" y="13.40" width="1.00" height="1.50" fill="var(--hc)" stroke="#853f31" stroke-width="0.045"></rect>
+          <line class="front-glass" x1="14.55" y1="13.55" x2="14.55" y2="14.75"></line>
+          <text class="label tiny" x="15.05" y="13.96">HC 150</text>
+          <text class="label tiny" x="15.05" y="14.26">150 x 100</text>
+
+          <rect x="14.65" y="12.05" width="0.90" height="1.00" fill="var(--hc)" stroke="#853f31" stroke-width="0.045"></rect>
+          <line class="front-glass" x1="14.65" y1="12.18" x2="14.65" y2="12.92"></line>
+          <text class="label tiny" x="15.10" y="12.40">9101C</text>
+          <text class="label tiny" x="15.10" y="12.69">100 x 90</text>
+        </g>
+
+        <!-- Suggested walking axes -->
+        <path d="M 7.65 33.35 C 7.55 28.6 7.65 24.2 7.85 20.7" fill="none" stroke="#87929e" stroke-width="0.06" stroke-dasharray="0.22 0.18"></path>
+        <path d="M 3.0 23.2 C 5.5 22.0 10.8 22.0 13.7 23.2" fill="none" stroke="#87929e" stroke-width="0.06" stroke-dasharray="0.22 0.18"></path>
+        <text class="dim" x="8.65" y="24.35">indicatieve loopzone</text>
+
+        <!-- Dimension lines -->
+        <line class="dim-line" x1="0" y1="36.00" x2="15.7" y2="36.00"></line>
+        <text class="dim" x="7.85" y="36.42">15,7 m</text>
+        <line class="dim-line" x1="-0.75" y1="0" x2="-0.75" y2="34.7"></line>
+        <text class="dim" x="-1.08" y="17.35" transform="rotate(-90 -1.08 17.35)">34,7 m</text>
+      </svg>
+    </div>
+
+    <aside class="panel">
+      <h2>Legenda</h2>
+      <div class="legend">
+        <span><i class="swatch" style="background: var(--infra)"></i>Infra4Health</span>
+        <span><i class="swatch" style="background: var(--hc)"></i>Health Company / 9101C</span>
+        <span><i class="swatch" style="background: var(--classic)"></i>Finse/klassieke sauna's</span>
+        <span><i class="swatch" style="background: var(--barrel)"></i>Barrelsauna's</span>
+        <span><i class="swatch" style="background: var(--spa)"></i>Zwemspa Alicante</span>
+        <span><i class="swatch" style="background: var(--hottub)"></i>Hottub / spa</span>
+        <span><i class="swatch" style="background: var(--canopy)"></i>Overkapping</span>
+        <span><i class="swatch" style="background: var(--bar)"></i>Bar</span>
+      </div>
+
+      <h2>Productvolgorde</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Zone</th>
+            <th>Product</th>
+            <th>Afmeting</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Rechtermuur, raam naar poort</td><td>160 glass front</td><td>160 x 120 x 195 cm</td></tr>
+          <tr><td>Rechtermuur</td><td>130 glass front</td><td>130 x 120 x 195 cm</td></tr>
+          <tr><td>Rechtermuur</td><td>i150</td><td>150 x 110 x 200 cm</td></tr>
+          <tr><td>Rechtermuur</td><td>i120</td><td>120 x 110 x 200 cm</td></tr>
+          <tr><td>Rechtermuur</td><td>i100</td><td>100 x 100 x 200 cm</td></tr>
+          <tr><td>Rechtermuur</td><td>HC 90</td><td>90 x 90 x 200 cm</td></tr>
+          <tr><td>Rechtermuur</td><td>HC 110</td><td>110 x 100 x 200 cm</td></tr>
+          <tr><td>Rechtermuur</td><td>HC 150</td><td>150 x 100 x 200 cm</td></tr>
+          <tr><td>Rechtermuur, bij poort</td><td>9101C</td><td>100 x 90 x 190 cm</td></tr>
+          <tr><td>Linkermuur boven bar</td><td>Discovery sauna</td><td>206 x 205 x 204 cm</td></tr>
+          <tr><td>Linkermuur</td><td>Traditionele Finse sauna</td><td>200 x 175 x 190 cm</td></tr>
+          <tr><td>Linkermuur</td><td>Chaleur sauna</td><td>220 x 120 x 200 cm</td></tr>
+          <tr><td>Vooraan rechtsonder</td><td>TR230 Halfglas</td><td>230 diep, diam. 185, h 205 cm</td></tr>
+          <tr><td>Vooraan rechtsonder</td><td>TR300 Halfglas</td><td>286 diep, diam. 214, h 230 cm</td></tr>
+          <tr><td>Midden</td><td>Zwemspa Alicante</td><td>594 x 228 x 137 cm</td></tr>
+          <tr><td>Boven/rond zwemspa</td><td>Overkapping</td><td>300 x 600 cm</td></tr>
+          <tr><td>Linksonder</td><td>Overkapping + kunstgras + Bullfrog A7L</td><td>400 x 400 cm; A7L 224 x 224 cm</td></tr>
+          <tr><td>Rechts bij zijraam</td><td>Python hottub spa</td><td>diam. 203 cm, h 90 cm</td></tr>
+        </tbody>
+      </table>
+
+      <p class="note">De glass-front/halfglas zijden zijn als lichte lijn aangeduid. Bij de barrels wijzen die naar de voorste ramen, zodat inkijk van buiten mogelijk blijft. De overkapping rond de Alicante is als 3 x 6 m zone getekend; linksonder staat een 4 x 4 m kunstgraszone met de A7L. De loopzones zijn indicatief en kunnen strakker of ruimer worden gemaakt zodra alle exacte deur- en raamposities zijn nagemeten.</p>
+
+      <div class="sources">
+        Gebruikte productcontext: Sunspa Benelux pagina's voor Alicante, TR230/TR300 halfglas, Infra4Health 160/130 en 9101C.
+      </div>
+    </aside>
+  </section>
+</main>
+</body>
+</html>
