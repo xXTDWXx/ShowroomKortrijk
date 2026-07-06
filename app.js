@@ -2,6 +2,8 @@
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const STORAGE_KEY = 'showroom-bouwer-kortrijk-v1';
   const OFFICE_MIGRATION_KEY = 'showroom-bouwer-kortrijk-office-migrated-v1';
+  const PLAN_WIDTH = 15.6;
+  const PLAN_HEIGHT = 34.2;
   const svg = document.getElementById('plan');
   const board = document.getElementById('board');
   const itemsLayer = document.getElementById('items');
@@ -171,8 +173,8 @@
       dragState.originals.forEach((original) => {
         const item = placed.find((entry) => entry.uid === original.id);
         if (!item) return;
-        item.x = clamp(original.x + dx, 0, 15.7);
-        item.y = clamp(original.y + dy, 0, 34.7);
+        item.x = clamp(original.x + dx, 0, PLAN_WIDTH);
+        item.y = clamp(original.y + dy, 0, PLAN_HEIGHT);
       });
       renderItems(false);
       save();
@@ -374,8 +376,8 @@
     const item = {
       uid: uid(),
       productId,
-      x: clamp(x, 0.2, 15.5),
-      y: clamp(y, 0.2, 34.5),
+      x: clamp(x, 0.2, PLAN_WIDTH - 0.2),
+      y: clamp(y, 0.2, PLAN_HEIGHT - 0.2),
       r: 0
     };
     placed.push(item);
