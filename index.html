@@ -38,10 +38,14 @@
           <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
             <path d="M 0 0 L 6 3 L 0 6 z" fill="#5a6470"></path>
           </marker>
+          <pattern id="tileGrid" width="0.6" height="0.6" patternUnits="userSpaceOnUse">
+            <path d="M 0.6 0 H 0 V 0.6" fill="none" stroke="#d8d0c4" stroke-width="0.018" opacity="0.55"></path>
+          </pattern>
         </defs>
 
         <g id="fixedPlan">
           <rect class="floor" x="0" y="0" width="15.7" height="34.7"></rect>
+          <rect class="tile-grid" x="0" y="0" width="15.7" height="34.7"></rect>
           <rect class="wall" x="0" y="0" width="15.7" height="34.7"></rect>
 
           <line class="window" x1="0.9" y1="34.7" x2="5.2" y2="34.7"></line>

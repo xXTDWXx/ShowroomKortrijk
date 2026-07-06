@@ -211,6 +211,7 @@
     }
 
     .floor { fill: var(--floor); stroke: none; }
+    .tile-grid { fill: url(#tileGrid); stroke: none; pointer-events: none; }
     .wall { fill: none; stroke: var(--wall); stroke-width: 0.16; stroke-linejoin: round; }
     .inner-wall { fill: none; stroke: var(--wall); stroke-width: 0.10; stroke-linejoin: round; }
     .window { stroke: var(--window); stroke-width: 0.12; stroke-linecap: round; }
