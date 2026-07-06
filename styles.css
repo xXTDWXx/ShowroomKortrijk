@@ -224,6 +224,7 @@
     .product-label { pointer-events: none; font: 0.18px Arial, Helvetica, sans-serif; fill: #1f2933; text-anchor: middle; dominant-baseline: middle; }
     .glass { pointer-events: none; stroke: #e8fbff; stroke-width: 0.07; stroke-linecap: round; vector-effect: non-scaling-stroke; }
     .selection-box { fill: none; stroke: var(--selected); stroke-width: 0.055; stroke-dasharray: 0.16 0.10; vector-effect: non-scaling-stroke; pointer-events: none; }
+    .marquee-selection { fill: rgba(37, 109, 144, 0.10); stroke: var(--selected); stroke-width: 0.055; stroke-dasharray: 0.18 0.12; vector-effect: non-scaling-stroke; pointer-events: none; }
     .drag-target { outline: 2px solid #256d90; outline-offset: -8px; }
 
     @media (max-width: 1120px) {

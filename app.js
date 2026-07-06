@@ -4,6 +4,7 @@
   const svg = document.getElementById('plan');
   const board = document.getElementById('board');
   const itemsLayer = document.getElementById('items');
+  const selectionLayer = svgEl('g', { id: 'selectionLayer' });
   const catalog = document.getElementById('catalog');
   const selectedTitle = document.getElementById('selectedTitle');
   const selectedMeta = document.getElementById('selectedMeta');
@@ -28,6 +29,7 @@
   const products = [
     { id: 'infra-160', group: 'Infra4Health', name: '160 glass front', dims: '160 x 120 x 195 cm', w: 1.60, d: 1.20, h: 1.95, kind: 'rect', color: 'infra', glass: 'left' },
     { id: 'infra-130', group: 'Infra4Health', name: '130 glass front', dims: '130 x 120 x 195 cm', w: 1.30, d: 1.20, h: 1.95, kind: 'rect', color: 'infra', glass: 'left' },
+    { id: 'infra-corner-160', group: 'Infra4Health', name: '160 hoek cabine', dims: '160 x 160 x 200 cm', w: 1.60, d: 1.60, h: 2.00, kind: 'corner', color: 'infra', glass: 'angled' },
     { id: 'i150', group: 'Infra4Health', name: 'i150', dims: '150 x 110 x 200 cm', w: 1.50, d: 1.10, h: 2.00, kind: 'rect', color: 'infra', glass: 'left' },
     { id: 'i120', group: 'Infra4Health', name: 'i120', dims: '120 x 110 x 200 cm', w: 1.20, d: 1.10, h: 2.00, kind: 'rect', color: 'infra', glass: 'left' },
     { id: 'i100', group: 'Infra4Health', name: 'i100', dims: '100 x 100 x 200 cm', w: 1.00, d: 1.00, h: 2.00, kind: 'rect', color: 'infra', glass: 'left' },
@@ -39,6 +41,7 @@
     { id: 'finse', group: 'Finse sauna\'s', name: 'Traditionele Finse sauna', dims: '200 x 175 x 190 cm', w: 2.00, d: 1.75, h: 1.90, kind: 'rect', color: 'classic', glass: 'right' },
     { id: 'chaleur', group: 'Finse sauna\'s', name: 'Chaleur sauna', dims: '220 x 120 x 200 cm', w: 2.20, d: 1.20, h: 2.00, kind: 'rect', color: 'classic', glass: 'right' },
     { id: 'icombi', group: 'Combi sauna', name: 'Infra4Health iCombi', dims: '220 x 200 x 210 cm', w: 2.20, d: 2.00, h: 2.10, kind: 'rect', color: 'infra', glass: 'left' },
+    { id: 'trad-combi-small', group: 'Combi sauna', name: 'Traditionele kleine combi', dims: '180 x 140 cm', w: 1.80, d: 1.40, kind: 'rect', color: 'classic', glass: 'right' },
     { id: 'tr230', group: 'Barrels', name: 'TR230 Halfglas', dims: '230 diep, diam. 185, h 205 cm', w: 1.85, d: 2.30, h: 2.05, kind: 'barrel', color: 'barrel' },
     { id: 'tr300', group: 'Barrels', name: 'TR300 Halfglas', dims: '286 diep, diam. 214, h 230 cm', w: 2.14, d: 2.86, h: 2.30, kind: 'barrel', color: 'barrel' },
     { id: 'alicante', group: 'Zwemspa\'s', name: 'Zwemspa Alicante', dims: '594 x 228 x 137 cm', w: 2.28, d: 5.94, h: 1.37, kind: 'spa', color: 'spa' },
@@ -62,8 +65,10 @@
   ];
 
   let placed = load();
-  let selectedId = null;
+  let selectedIds = new Set();
   let dragState = null;
+
+  svg.appendChild(selectionLayer);
 
   renderCatalog();
   renderItems();
@@ -95,37 +100,88 @@
   });
 
   svg.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0) return;
     const group = event.target.closest('[data-item-id]');
     if (!group) {
-      selectedId = null;
-      updateSelection();
-      renderItems();
+      const point = clientToSvg(event.clientX, event.clientY);
+      dragState = {
+        type: 'select',
+        startX: point.x,
+        startY: point.y,
+        currentX: point.x,
+        currentY: point.y,
+        moved: false,
+        rect: svgEl('rect', { class: 'marquee-selection', x: point.x, y: point.y, width: 0, height: 0 })
+      };
+      selectionLayer.appendChild(dragState.rect);
+      svg.setPointerCapture(event.pointerId);
       return;
     }
     event.preventDefault();
     const item = placed.find((entry) => entry.uid === group.dataset.itemId);
     if (!item) return;
-    selectedId = item.uid;
+
+    if (event.shiftKey) {
+      if (selectedIds.has(item.uid)) selectedIds.delete(item.uid);
+      else selectedIds.add(item.uid);
+    } else if (!selectedIds.has(item.uid)) {
+      selectedIds = new Set([item.uid]);
+    }
     updateSelection();
     renderItems();
     const point = clientToSvg(event.clientX, event.clientY);
-    dragState = { id: item.uid, dx: point.x - item.x, dy: point.y - item.y };
+    dragState = {
+      type: 'move',
+      ids: [...selectedIds],
+      startX: point.x,
+      startY: point.y,
+      originals: [...selectedIds].map((id) => {
+        const selected = placed.find((entry) => entry.uid === id);
+        return selected ? { id, x: selected.x, y: selected.y } : null;
+      }).filter(Boolean)
+    };
     svg.setPointerCapture(event.pointerId);
   });
 
   svg.addEventListener('pointermove', (event) => {
     if (!dragState) return;
-    const item = placed.find((entry) => entry.uid === dragState.id);
-    if (!item) return;
     const point = clientToSvg(event.clientX, event.clientY);
-    item.x = clamp(point.x - dragState.dx, 0, 15.7);
-    item.y = clamp(point.y - dragState.dy, 0, 34.7);
-    renderItems(false);
-    save();
+    const dx = point.x - dragState.startX;
+    const dy = point.y - dragState.startY;
+
+    if (dragState.type === 'select') {
+      dragState.currentX = point.x;
+      dragState.currentY = point.y;
+      dragState.moved = dragState.moved || Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05;
+      updateMarquee(dragState);
+      if (dragState.moved) {
+        selectedIds = idsInRect(rectFromPoints(dragState.startX, dragState.startY, point.x, point.y));
+        renderItems(false);
+        updateSelection();
+      }
+      return;
+    }
+
+    if (dragState.type === 'move') {
+      dragState.originals.forEach((original) => {
+        const item = placed.find((entry) => entry.uid === original.id);
+        if (!item) return;
+        item.x = clamp(original.x + dx, 0, 15.7);
+        item.y = clamp(original.y + dy, 0, 34.7);
+      });
+      renderItems(false);
+      save();
+    }
   });
 
   svg.addEventListener('pointerup', (event) => {
     if (dragState) {
+      if (dragState.type === 'select') {
+        if (!dragState.moved) selectedIds = new Set();
+        selectionLayer.innerHTML = '';
+        renderItems();
+        updateSelection();
+      }
       dragState = null;
       save();
     }
@@ -136,20 +192,20 @@
   rotateRightBtn.addEventListener('click', () => rotateSelected(90));
 
   copyBtn.addEventListener('click', () => {
-    const item = selectedItem();
-    if (!item) return;
-    const clone = { ...item, uid: uid(), x: item.x + 0.35, y: item.y + 0.35 };
-    placed.push(clone);
-    selectedId = clone.uid;
+    const items = selectedItems();
+    if (!items.length) return;
+    const clones = items.map((item) => ({ ...item, uid: uid(), x: item.x + 0.35, y: item.y + 0.35 }));
+    placed.push(...clones);
+    selectedIds = new Set(clones.map((clone) => clone.uid));
     renderItems();
     updateSelection();
     save();
   });
 
   deleteBtn.addEventListener('click', () => {
-    if (!selectedId) return;
-    placed = placed.filter((item) => item.uid !== selectedId);
-    selectedId = null;
+    if (!selectedIds.size) return;
+    placed = placed.filter((item) => !selectedIds.has(item.uid));
+    selectedIds = new Set();
     renderItems();
     updateSelection();
     save();
@@ -158,7 +214,7 @@
   clearBtn.addEventListener('click', () => {
     if (!window.confirm('Alle geplaatste producten verwijderen?')) return;
     placed = [];
-    selectedId = null;
+    selectedIds = new Set();
     renderItems();
     updateSelection();
     save();
@@ -167,7 +223,7 @@
   savePngBtn.addEventListener('click', exportPng);
 
   window.addEventListener('keydown', (event) => {
-    if (!selectedId) return;
+    if (!selectedIds.size) return;
     const target = event.target;
     const isTyping = target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
     if (isTyping) return;
@@ -178,8 +234,8 @@
     }
     if (event.key === 'Delete' || event.key === 'Backspace') {
       event.preventDefault();
-      placed = placed.filter((item) => item.uid !== selectedId);
-      selectedId = null;
+      placed = placed.filter((item) => !selectedIds.has(item.uid));
+      selectedIds = new Set();
       renderItems();
       updateSelection();
       save();
@@ -237,7 +293,7 @@
         'data-item-id': item.uid,
         tabindex: 0
       });
-      group.appendChild(drawProduct(product, item.uid === selectedId));
+      group.appendChild(drawProduct(product, selectedIds.has(item.uid)));
       itemsLayer.appendChild(group);
     });
     if (updatePanel) updateSelection();
@@ -257,6 +313,10 @@
       const path = `M ${-w / 2} ${-d / 2 + w / 2} C ${-w / 2} ${-d / 2} ${w / 2} ${-d / 2} ${w / 2} ${-d / 2 + w / 2} L ${w / 2} ${d / 2} L ${-w / 2} ${d / 2} Z`;
       group.appendChild(svgEl('path', { d: path, fill, stroke, class: 'product-shape' }));
       group.appendChild(svgEl('line', { x1: -w * 0.35, y1: d / 2, x2: w * 0.35, y2: d / 2, class: 'glass' }));
+    } else if (product.kind === 'corner') {
+      const points = cornerPoints(w, d).map(([x, y]) => `${x},${y}`).join(' ');
+      group.appendChild(svgEl('polygon', { points, fill, stroke, class: 'product-shape' }));
+      group.appendChild(svgEl('line', { x1: w / 2, y1: d * 0.18, x2: w * 0.18, y2: d / 2, class: 'glass' }));
     } else {
       const opacity = product.kind === 'canopy' ? 0.92 : 1;
       const rectFill = product.kind === 'grass' ? 'url(#grass)' : fill;
@@ -288,7 +348,7 @@
       if (r) {
         group.appendChild(svgEl('circle', { cx: 0, cy: 0, r: r + 0.08, class: 'selection-box' }));
       } else {
-        group.appendChild(svgEl('rect', { x: -w / 2 - 0.08, y: -d / 2 - 0.08, width: w + 0.16, height: d + 0.16, class: 'selection-box' }));
+        group.appendChild(selectionShape(product));
       }
     }
     return group;
@@ -305,31 +365,38 @@
       r: 0
     };
     placed.push(item);
-    selectedId = item.uid;
+    selectedIds = new Set([item.uid]);
     renderItems();
     save();
   }
 
   function updateSelection() {
-    const item = selectedItem();
-    const product = item ? productById(item.productId) : null;
-    rotateLeftBtn.disabled = !item;
-    rotateRightBtn.disabled = !item;
-    copyBtn.disabled = !item;
-    deleteBtn.disabled = !item;
-    if (!item || !product) {
+    const items = selectedItems();
+    const product = items.length === 1 ? productById(items[0].productId) : null;
+    rotateLeftBtn.disabled = !items.length;
+    rotateRightBtn.disabled = !items.length;
+    copyBtn.disabled = !items.length;
+    deleteBtn.disabled = !items.length;
+    if (!items.length) {
       selectedTitle.textContent = 'Geen product geselecteerd';
-      selectedMeta.textContent = 'Plaats of selecteer een product op het plan.';
+      selectedMeta.textContent = 'Sleep op het plan om meerdere producten te selecteren.';
+      return;
+    }
+    if (items.length > 1) {
+      selectedTitle.textContent = `${items.length} producten geselecteerd`;
+      selectedMeta.textContent = 'Sleep een geselecteerd product om de hele selectie te verplaatsen.';
       return;
     }
     selectedTitle.textContent = product.name;
-    selectedMeta.textContent = `${product.dims} | positie ${item.x.toFixed(2)} m, ${item.y.toFixed(2)} m | rotatie ${item.r || 0} graden`;
+    selectedMeta.textContent = `${product.dims} | positie ${items[0].x.toFixed(2)} m, ${items[0].y.toFixed(2)} m | rotatie ${items[0].r || 0} graden`;
   }
 
   function rotateSelected(degrees) {
-    const item = selectedItem();
-    if (!item) return;
-    item.r = normalizeRotation((item.r || 0) + degrees);
+    const items = selectedItems();
+    if (!items.length) return;
+    items.forEach((item) => {
+      item.r = normalizeRotation((item.r || 0) + degrees);
+    });
     renderItems();
     updateSelection();
     save();
@@ -368,6 +435,78 @@
     return group;
   }
 
+  function cornerPoints(w, d) {
+    return [
+      [-w / 2, -d / 2],
+      [w / 2, -d / 2],
+      [w / 2, d * 0.18],
+      [w * 0.18, d / 2],
+      [-w / 2, d / 2]
+    ];
+  }
+
+  function selectionShape(product) {
+    if (product.kind === 'corner') {
+      const points = cornerPoints(product.w, product.d)
+        .map(([x, y]) => `${x},${y}`)
+        .join(' ');
+      return svgEl('polygon', { points, class: 'selection-box' });
+    }
+    return svgEl('rect', { x: -product.w / 2 - 0.08, y: -product.d / 2 - 0.08, width: product.w + 0.16, height: product.d + 0.16, class: 'selection-box' });
+  }
+
+  function updateMarquee(state) {
+    const rect = rectFromPoints(state.startX, state.startY, state.currentX, state.currentY);
+    state.rect.setAttribute('x', rect.x);
+    state.rect.setAttribute('y', rect.y);
+    state.rect.setAttribute('width', rect.width);
+    state.rect.setAttribute('height', rect.height);
+  }
+
+  function rectFromPoints(x1, y1, x2, y2) {
+    return {
+      x: Math.min(x1, x2),
+      y: Math.min(y1, y2),
+      width: Math.abs(x2 - x1),
+      height: Math.abs(y2 - y1)
+    };
+  }
+
+  function idsInRect(rect) {
+    return new Set(placed.filter((item) => {
+      const bounds = itemBounds(item);
+      return bounds.x1 <= rect.x + rect.width &&
+        bounds.x2 >= rect.x &&
+        bounds.y1 <= rect.y + rect.height &&
+        bounds.y2 >= rect.y;
+    }).map((item) => item.uid));
+  }
+
+  function itemBounds(item) {
+    const product = productById(item.productId);
+    if (!product) return { x1: item.x, y1: item.y, x2: item.x, y2: item.y };
+    const halfW = product.w / 2;
+    const halfD = product.d / 2;
+    const radians = ((item.r || 0) * Math.PI) / 180;
+    const cos = Math.cos(radians);
+    const sin = Math.sin(radians);
+    const corners = [
+      [-halfW, -halfD],
+      [halfW, -halfD],
+      [halfW, halfD],
+      [-halfW, halfD]
+    ].map(([x, y]) => ({
+      x: item.x + x * cos - y * sin,
+      y: item.y + x * sin + y * cos
+    }));
+    return {
+      x1: Math.min(...corners.map((point) => point.x)),
+      y1: Math.min(...corners.map((point) => point.y)),
+      x2: Math.max(...corners.map((point) => point.x)),
+      y2: Math.max(...corners.map((point) => point.y))
+    };
+  }
+
   function splitDims(dims, maxChars) {
     const cleaned = dims
       .split('|')
@@ -392,7 +531,11 @@
   }
 
   function selectedItem() {
-    return placed.find((item) => item.uid === selectedId);
+    return selectedItems()[0];
+  }
+
+  function selectedItems() {
+    return placed.filter((item) => selectedIds.has(item.uid));
   }
 
   function productById(id) {
@@ -468,7 +611,13 @@
   function exportPng() {
     const clone = svg.cloneNode(true);
     clone.setAttribute('xmlns', SVG_NS);
-    const styles = [...document.querySelectorAll('style')].map((style) => style.textContent).join('\n');
+    const styles = [...document.styleSheets].map((sheet) => {
+      try {
+        return [...sheet.cssRules].map((rule) => rule.cssText).join('\n');
+      } catch {
+        return '';
+      }
+    }).join('\n');
     const styleNode = document.createElementNS(SVG_NS, 'style');
     styleNode.textContent = styles;
     clone.insertBefore(styleNode, clone.firstChild);
